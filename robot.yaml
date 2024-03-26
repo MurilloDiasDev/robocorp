@@ -1,0 +1,17 @@
+tasks:
+  CustomSelenium:
+    robotTaskName: Using CustomSelenium with Robot Framework Syntax
+  Extended-Selenium-Library:
+    robotTaskName: Using Extended Selenium Library
+  Python-Task:
+    shell: python task.py
+
+
+condaConfigFile: conda.yaml
+artifactsDir: output
+PATH:
+  - .
+PYTHONPATH:
+  - .
+ignoreFiles:
+  - .gitignore

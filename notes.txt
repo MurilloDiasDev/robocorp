@@ -1,0 +1,3 @@
+local path to execute python 3.9 
+
+C:\Users\muril\AppData\Local\Programs\Python\Python39\python.exe
