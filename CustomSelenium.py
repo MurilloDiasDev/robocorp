@@ -25,7 +25,7 @@ class CustomSelenium:
 
     def set_webdriver(self):
         options = self.set_chrome_options()
-        self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver.exe'))
+        self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
         #self.driver = webdriver.Chrome(executable_path=r'C:\Users\muril\AppData\Local\robocorp\webdrivers\chromedriver.exe')
 
     def set_page_size(self, width:int, height:int):
