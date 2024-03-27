@@ -1,13 +1,12 @@
 
 import logging
+import re
 import selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-
-
 
 class CustomSelenium:
 
@@ -19,14 +18,12 @@ class CustomSelenium:
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
         options.add_argument('--disable-dev-shm-usage')
-        options.add_argument("--incognito")
-
+        #options.add_argument("--incognito")
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument("--disable-extensions")
         options.add_argument("--disable-gpu")
-        options.add_argument("--start-maximized")
-        options.add_argument('log-level=3')#para ignorar warnings
+        options.add_argument('log-level=3')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
         return options
@@ -36,22 +33,6 @@ class CustomSelenium:
         self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
         #self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
 
-    def set_page_size(self, width:int, height:int):
-        #Extract the current window size from the driver
-        current_window_size = self.driver.get_window_size()
-
-        #Extract the client window size from the html tag
-        html = self.driver.find_element_by_tag_name('html')
-        inner_width = int(html.get_attribute("clientWidth"))
-        inner_height = int(html.get_attribute("clientHeight"))
-
-        #"Internal width you want to set+Set "outer frame width" to window size
-        target_width = width + (current_window_size["width"] - inner_width)
-        target_height = height + (current_window_size["height"] - inner_height)
-        self.driver.set_window_rect(
-            width=target_width,
-            height=target_height)
-
     def open_url(self, url:str):
         self.driver.get(url)
 
@@ -59,10 +40,34 @@ class CustomSelenium:
         if self.driver:
             self.driver.quit()
 
-    def full_page_screenshot(self, url):
-        self.driver.get(url)
-        page_width = self.driver.execute_script('return document.body.scrollWidth')
-        page_height = self.driver.execute_script('return document.body.scrollHeight')
-        self.driver.set_window_size(page_width, page_height)
-        self.driver.save_screenshot('screenshot.png')
-        self.driver.quit()
+    def page_screenshot(self):
+        self.driver.save_screenshot('output/Screenshot.png')
+
+    def get_text(self, xpath:str):
+        wait_fast = WebDriverWait(self.driver, 10)
+        text = wait_fast.until(EC.presence_of_element_located((By.XPATH, xpath))).get_attribute('innerHTML')
+        text_lstrip = text.lstrip()
+        return str(text_lstrip)
+    
+    def get_ads(self, xpath:str):
+        wait_fast = WebDriverWait(self.driver, 0.1)
+        try:
+            text = wait_fast.until(EC.presence_of_element_located((By.XPATH, xpath))).get_attribute('innerHTML')
+            return True
+        except:
+            return False
+    
+    def get_image_url(self, xpath:str):
+        wait_fast = WebDriverWait(self.driver, 10)
+        text = wait_fast.until(EC.presence_of_element_located((By.XPATH, xpath))).get_attribute('src')
+        return str(text)
+    
+    def get_date(self, xpath:str):
+        wait_fast = WebDriverWait(self.driver, 10)
+        text = wait_fast.until(EC.presence_of_element_located((By.XPATH, xpath))).get_attribute('innerHTML')
+        text_date_regex = re.search(r"&nbsp;(.*?)\|", text).group(1)
+        text_lstrip = text_date_regex.lstrip()
+        return str(text_lstrip)
+
+
+

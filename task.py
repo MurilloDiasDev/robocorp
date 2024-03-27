@@ -8,41 +8,41 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from robocorp import workitems
 
-
-
-
 def minimal_task():
     selenium = CustomSelenium()
     selenium.set_webdriver()
+    selenium.open_url("https://nypost.com/search/dollar/")
     
-    #selenium.open_url("https://github.com/robocorp/rpaframework", "github.png")
-    selenium.open_url("https://www.latimes.com/")
-    time.sleep(2.0)
-    selenium.driver.save_screenshot('output/Screenshot.png')
-    wait_fast = WebDriverWait(selenium.driver, 10)
-    text = wait_fast.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/main/div[2]/div/div[1]/ul[1]/li/ps-promo/div/div[2]/p'))).get_attribute('innerHTML')
-    
-    try:
-        workitems.Outputs.create(payload=text)
-    except:
-        print('error in create')
+    rows = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+    #rows = [1,2,3,4,5,6,7,8]
 
-    try:
-        workitems.Output.add_file(path="Screenshot.png", name="screen")
-    except:
-        print('error in create')
-    
+    for row in rows:
+        row_str = str(row)
+        
+        try:
+            ads_text = selenium.get_ads('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div/div/p')
 
-    print(str(text))
+            if ads_text == True:
+                continue
 
-    try:
-        with open('output/log.txt', 'w', encoding='utf8') as file:
-            file.write(text)
-    except:
-        pass
+            title_text = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/h3/a')
+            date = selenium.get_date('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/span')
+            description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
+            image_url = selenium.get_image_url('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[1]/a/img')
 
-    print("Done.")
+            print("=========================================================================")
+            print(date, title_text)
+            print(description)
+            print(image_url)
 
+        except:
+            print('error')
+
+
+    #selenium.page_screenshot()
+    # with open('output/log.txt', 'w', encoding='utf8') as file:
+    #     file.write(text)
+    #time.sleep(2.0)
 
 if __name__ == "__main__":
     minimal_task()
