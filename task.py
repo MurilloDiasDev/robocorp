@@ -18,7 +18,7 @@ def minimal_task():
     #selenium.open_url("https://github.com/robocorp/rpaframework", "github.png")
     selenium.open_url("https://www.latimes.com/")
     time.sleep(2.0)
-    selenium.driver.save_screenshot('Screenshot.png')
+    selenium.driver.save_screenshot('output/Screenshot.png')
     wait_fast = WebDriverWait(selenium.driver, 10)
     text = wait_fast.until(EC.presence_of_element_located((By.XPATH, '/html/body/div[3]/main/div[2]/div/div[1]/ul[1]/li/ps-promo/div/div[2]/p'))).get_attribute('innerHTML')
     
@@ -34,6 +34,12 @@ def minimal_task():
     
 
     print(str(text))
+
+    try:
+        with open('output/log.txt', 'w', encoding='utf8') as file:
+            file.write(text)
+    except:
+        pass
 
     print("Done.")
 
