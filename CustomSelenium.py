@@ -30,8 +30,8 @@ class CustomSelenium:
 
     def set_webdriver(self):
         options = self.set_chrome_options()
-        self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
-        #self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
+        #self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
+        self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
 
     def open_url(self, url:str):
         self.driver.get(url)
