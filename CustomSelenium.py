@@ -1,9 +1,11 @@
 
 import logging
 import selenium
-from selenium.webdriver.chrome.service import Service
-
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 
 
 
@@ -32,7 +34,7 @@ class CustomSelenium:
     def set_webdriver(self):
         options = self.set_chrome_options()
         self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
-        #self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
+        # self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
 
     def set_page_size(self, width:int, height:int):
         #Extract the current window size from the driver
