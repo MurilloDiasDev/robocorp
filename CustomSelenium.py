@@ -108,7 +108,7 @@ class CustomSelenium:
     def dowload_image(self, image_url, index:str):
 
         response = requests.get(image_url)
-        with open('output/images/image_' + str(index) + '.jpg', 'wb') as file:
+        with open('output/image_' + str(index) + '.jpg', 'wb') as file:
             file.write(response.content)
 
         
