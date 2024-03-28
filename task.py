@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 
 def minimal_task():
+
     selenium = CustomSelenium()
     selenium.set_webdriver()
     date_now = datetime.now()
@@ -15,7 +16,9 @@ def minimal_task():
     index = 1
 
     try:
+
         for work_item in workitems.inputs:
+
             phrase = work_item.payload['phrase']
             months = work_item.payload['months']
             section = work_item.payload['section']
@@ -26,6 +29,7 @@ def minimal_task():
 
             try:
                 selenium.open_url("https://nypost.com/search/" + phrase.replace(" ", "+") + "/page/" + str(page) + "/?section=" + section.replace(" ", "-"))
+
             except:
                 selenium.log_error('browser was unable to open the page')
 
@@ -33,11 +37,13 @@ def minimal_task():
             rows = selenium.rows()
 
             for row in rows:
+
                 row_str = str(row)
                 not_found = selenium.get_not_found('//*[@id="search-results"]/div/div[3]/h2')
                 ads_text = selenium.get_ads('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div/div/p')
 
                 if not_found == True:
+
                     maintain = False
                     selenium.save_excel_not_found()
                     break
@@ -46,6 +52,7 @@ def minimal_task():
                     continue
 
                 try:
+
                     title_text = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/h3/a')
                     date_str = selenium.get_date('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/span')
                     description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
@@ -67,6 +74,7 @@ def minimal_task():
 
                 if delta_date.days < filter_months:
                     pass
+                
                 else:
                     maintain = False
                     selenium.save_excel(index)
