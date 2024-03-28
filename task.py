@@ -1,5 +1,4 @@
 
-#from ExtendedSelenium import ExtendedSelenium
 from CustomSelenium import CustomSelenium
 from robocorp import workitems
 from datetime import datetime
@@ -74,7 +73,7 @@ def minimal_task():
 
                 if delta_date.days < filter_months:
                     pass
-                
+
                 else:
                     maintain = False
                     selenium.save_excel(index)
