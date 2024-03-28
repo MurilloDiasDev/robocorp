@@ -15,6 +15,8 @@ class CustomSelenium:
     def __init__(self):
         self.driver = None
         self.logger = logging.getLogger(__name__)
+        logging.basicConfig(filename='output/task.log', level=logging.INFO)
+        self.logger.info('Started')
         self.df = pd.DataFrame(columns=['title', 'date', 'description', 'picture_filename', 'phrases_in_title', 'phrases_in_description', 'contains_money'])
         self.regex = r'\$((\d{1,3}(,\d{3})*)|(\d+ dollars)|(\d+ USD))(\.\d{1,2})?'
 
@@ -22,7 +24,6 @@ class CustomSelenium:
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
         options.add_argument('--disable-dev-shm-usage')
-        #options.add_argument("--incognito")
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')
         options.add_argument("--disable-extensions")
@@ -35,7 +36,6 @@ class CustomSelenium:
     def set_webdriver(self):
         options = self.set_chrome_options()
         self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
-        # self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
         
     def open_url(self, url:str):
         self.driver.get(url)
@@ -53,10 +53,23 @@ class CustomSelenium:
         text_lstrip = text.lstrip()
         return str(text_lstrip)
     
+    def get_not_found(self, xpath:str):
+        wait_fast = WebDriverWait(self.driver, 0.05)
+        try:    
+            text = wait_fast.until(EC.presence_of_element_located((By.XPATH, xpath))).get_attribute('innerHTML')
+            text_lstrip = text.lstrip().rstrip()
+            if str(text_lstrip) == 'No Articles Found':
+                self.logger.info('No Articles Found')
+                return True
+        except:
+            return False
+    
+    
     def get_ads(self, xpath:str):
         wait_fast = WebDriverWait(self.driver, 0.05)
         try:
             text = wait_fast.until(EC.presence_of_element_located((By.XPATH, xpath))).get_attribute('innerHTML')
+            self.logger.info("ADS - advertisement found, skipping article")
             return True
         except:
             return False
@@ -81,8 +94,8 @@ class CustomSelenium:
 
         number_phrases_in_title = title_text.count(phrase)
         number_phrases_in_description = description.count(phrase)
+        self.logger.info("extracting data - " + str(index) + " - " + date_str + " - " + title_text)
         self.dowload_image(image_url, index)
-
         title_and_description = title_text + description
 
         if re.search(self.regex, title_and_description):
@@ -100,16 +113,30 @@ class CustomSelenium:
         dict['contains_money'] = str(contains_money)
         num_rows = len(self.df)
         self.df.loc[num_rows] = dict
-        print(index, " - ", date_str, " - ", title_text)
+
         
-    def save_excel(self):
+        
+    def save_excel(self, index):
         self.df.to_excel('output/output.xlsx', index=False)
+        self.logger.info('Finished - total items processed:' + str(index))
+
+    def save_excel_not_found(self):
+        dict = {}
+        dict['title'] = 'No Articles Found'
+        num_rows = len(self.df)
+        self.df.loc[num_rows] = dict
+        self.df.to_excel('output/output.xlsx', index=False)
+        print('No Articles Found')
 
     def dowload_image(self, image_url, index:str):
+
+        self.logger.info("Dowload_image - " + image_url)
 
         response = requests.get(image_url)
         with open('output/image_' + str(index) + '.jpg', 'wb') as file:
             file.write(response.content)
 
-        
+    def log_error(self, text:str):
+        self.page_screenshot()
+        self.logger.error(text)
 
