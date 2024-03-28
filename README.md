@@ -4,6 +4,13 @@ RPA Challenge 2.0
 
 Automate the process of extracting data from a news site.
 
+The work item must be created as example json below
+{
+    "phrase": "dollar",
+    "section": "tech",
+    "months": 2
+  }
+
 Possible sections or categories to search:
 
     astrology
