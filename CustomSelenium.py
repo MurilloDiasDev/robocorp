@@ -2,6 +2,7 @@
 import logging
 import re
 import selenium
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,6 +14,8 @@ class CustomSelenium:
     def __init__(self):
         self.driver = None
         self.logger = logging.getLogger(__name__)
+        self.df = pd.DataFrame(columns=['title', 'date', 'description', 'picture_filename', 'phrases_in_title', 'phrases_in_description', 'contains_money'])
+        self.regex = r'\$((\d{1,3}(,\d{3})*)|(\d+ dollars)|(\d+ USD))(\.\d{1,2})?'
 
     def set_chrome_options(self):
         options = webdriver.ChromeOptions()
@@ -32,7 +35,7 @@ class CustomSelenium:
         options = self.set_chrome_options()
         self.driver = webdriver.Chrome(options=options, service=Service('./chromedriver'))
         # self.driver = webdriver.Chrome(options=options, service=Service(r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'))
-
+        
     def open_url(self, url:str):
         self.driver.get(url)
 
@@ -72,4 +75,31 @@ class CustomSelenium:
     def rows(self):
         rows = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
         return rows
+    
+    def out_excel(self, index:str,  title_text:str, date_str:str, description:str, image_url:str, phrase:str):
+
+        number_phrases_in_title = title_text.count(phrase)
+        number_phrases_in_description = description.count(phrase)
+        title_and_description = title_text + description
+        if re.search(self.regex, title_and_description):
+            contains_money = True
+        else:
+            contains_money = False
+
+        dict = {}
+        dict['title'] = title_text
+        dict['date'] = date_str
+        dict['description'] = description
+        dict['picture_filename'] = image_url
+        dict['phrases_in_title'] = number_phrases_in_title
+        dict['phrases_in_description'] = number_phrases_in_description
+        dict['contains_money'] = str(contains_money)
+        num_rows = len(self.df)
+        self.df.loc[num_rows] = dict
+        print(index, " - ", date_str, " - ", title_text)
+        
+    def save(self):
+        self.df.to_excel('output/output.xlsx', index=False)
+
+        
 

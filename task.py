@@ -19,6 +19,10 @@ def minimal_task():
         months = work_item.payload['months']
         section = work_item.payload['section']
 
+    # phrase = "dollar"
+    # section = "tech"
+    # months = "1"
+    months_int = int(months)
 
     while maintain == True:
 
@@ -33,31 +37,32 @@ def minimal_task():
 
             if ads_text == True:
                 continue
-            index = index + 1
 
             title_text = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/h3/a')
             date_str = selenium.get_date('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/span')
             description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
             image_url = selenium.get_image_url('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[1]/a/img')
 
+            selenium.out_excel(index, title_text, date_str, description, image_url, phrase)
+
+            index = index + 1
             date_datetime = datetime.strptime(date_str, "%B %d, %Y ")
             delta_date = date_now - date_datetime
 
-            months_int = int(months)
+            
+            if months == 0:
+                months = 1
 
             filter_months = months_int * 31
+
             if delta_date.days < filter_months:
                 pass
             else:
                 print('FINISH')
                 maintain = False
+                selenium.save()
                 break
-                
-            print(index," - ",date_datetime," - ", title_text)
-
             
-
-
 
     # for work_item in workitems.inputs:
     #     phrase = work_item.payload['phrase']

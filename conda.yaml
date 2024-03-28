@@ -14,3 +14,4 @@ dependencies:
     # https://pypi.org/
     - rpaframework # https://rpaframework.org/releasenotes.html
     - robocorp
+    - pandas
