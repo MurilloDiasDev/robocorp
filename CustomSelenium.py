@@ -2,6 +2,7 @@
 import logging
 import re
 import selenium
+import requests
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -76,11 +77,14 @@ class CustomSelenium:
         rows = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
         return rows
     
-    def out_excel(self, index:str,  title_text:str, date_str:str, description:str, image_url:str, phrase:str):
+    def outputs(self, index:str,  title_text:str, date_str:str, description:str, image_url:str, phrase:str):
 
         number_phrases_in_title = title_text.count(phrase)
         number_phrases_in_description = description.count(phrase)
+        self.dowload_image(image_url, index)
+
         title_and_description = title_text + description
+
         if re.search(self.regex, title_and_description):
             contains_money = True
         else:
@@ -90,7 +94,7 @@ class CustomSelenium:
         dict['title'] = title_text
         dict['date'] = date_str
         dict['description'] = description
-        dict['picture_filename'] = image_url
+        dict['picture_filename'] = 'image_' + str(index) + '.jpg'
         dict['phrases_in_title'] = number_phrases_in_title
         dict['phrases_in_description'] = number_phrases_in_description
         dict['contains_money'] = str(contains_money)
@@ -98,8 +102,14 @@ class CustomSelenium:
         self.df.loc[num_rows] = dict
         print(index, " - ", date_str, " - ", title_text)
         
-    def save(self):
+    def save_excel(self):
         self.df.to_excel('output/output.xlsx', index=False)
+
+    def dowload_image(self, image_url, index:str):
+
+        response = requests.get(image_url)
+        with open('output/images/image_' + str(index) + '.jpg', 'wb') as file:
+            file.write(response.content)
 
         
 

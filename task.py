@@ -22,6 +22,9 @@ def minimal_task():
     # phrase = "dollar"
     # section = "tech"
     # months = "1"
+
+# //*[@id="search-results"]/div/div[3]/h2
+
     months_int = int(months)
 
     while maintain == True:
@@ -32,7 +35,6 @@ def minimal_task():
         rows = selenium.rows()
         for row in rows:
             row_str = str(row)
-
             ads_text = selenium.get_ads('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div/div/p')
 
             if ads_text == True:
@@ -43,7 +45,7 @@ def minimal_task():
             description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
             image_url = selenium.get_image_url('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[1]/a/img')
 
-            selenium.out_excel(index, title_text, date_str, description, image_url, phrase)
+            selenium.outputs(index, title_text, date_str, description, image_url, phrase)
 
             index = index + 1
             date_datetime = datetime.strptime(date_str, "%B %d, %Y ")
@@ -58,21 +60,14 @@ def minimal_task():
             if delta_date.days < filter_months:
                 pass
             else:
-                print('FINISH')
                 maintain = False
-                selenium.save()
+                selenium.save_excel()
                 break
-            
 
-    # for work_item in workitems.inputs:
-    #     phrase = work_item.payload['phrase']
-        
     # selenium.page_screenshot()
-        
+
     # with open('output/log.txt', 'w', encoding='utf8') as file:
     #     file.write(text)
-        
-    #time.sleep(2.0)
 
 if __name__ == "__main__":
     minimal_task()
