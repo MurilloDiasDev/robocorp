@@ -16,19 +16,22 @@ class CustomSelenium:
         self.regex = r'\$((\d{1,3}(,\d{3})*)|(\d+ dollars)|(\d+ USD))(\.\d{1,2})?'
 
     def open_browser(self):
+
         self.browser.open_available_browser()
 
     def open_url(self, url:str):
+
         self.browser.go_to(url)
 
     def get_text(self, xpath:str):
+
         text = self.browser.get_text(str(xpath))
         text_lstrip = text.lstrip()
         return str(text_lstrip)
 
     def get_not_found(self, xpath:str):
-        try:
 
+        try:
             if self.browser.get_text(xpath) == 'NO ARTICLES FOUND':
                 self.logger.info('No Articles Found')
                 return True
@@ -36,25 +39,31 @@ class CustomSelenium:
             return False
 
     def get_ads(self, xpath:str):
+
         try:
             self.browser.get_element_attribute(xpath, "innerHTML")
             self.logger.info("ADS - advertisement found, skipping article")
             return True
+        
         except:
             return False
 
     def get_image_url(self, xpath:str):
+
         return self.browser.get_element_attribute(xpath, "src")
 
     def get_date(self, xpath:str):
+
         text = self.browser.get_text(str(xpath))
-        print(text)
         pattern = r"([A-Za-z]+ \d{1,2}, \d{4})"
         text_date_regex = re.search(pattern, str(text)).group(1)
+
         return str(text_date_regex)
 
     def rows(self):
+
         rows = list(range(1,23))
+
         return rows
 
     def outputs(self, index:str,  title_text:str, date_str:str, description:str, image_url:str, phrase:str):
@@ -66,6 +75,7 @@ class CustomSelenium:
 
         if re.search(self.regex, title_and_description):
             contains_money = True
+
         else:
             contains_money = False
 
@@ -81,10 +91,12 @@ class CustomSelenium:
         self.df.loc[num_rows] = dict
 
     def save_excel(self, index):
+
         self.df.to_excel('output/output.xlsx', index=False)
         self.logger.info('Finished - total items processed:' + str(index))
 
     def save_excel_not_found(self):
+
         dict = {}
         dict['title'] = 'No Articles Found'
         num_rows = len(self.df)
@@ -93,15 +105,18 @@ class CustomSelenium:
         self.logger.info('No Articles Found')
 
     def dowload_image(self, image_url, index:str):
+
         self.logger.info("Dowload_image - " + image_url)
         response = requests.get(image_url)
         with open('output/image_' + str(index) + '.jpg', 'wb') as file:
             file.write(response.content)
 
     def log_error(self, text:str):
+
         self.page_screenshot()
         self.logger.error(text)
 
     def page_screenshot(self):
+
         self.browser.capture_page_screenshot(filename="output/screenshot.png")
         self.logger.info("Screenshot captured")

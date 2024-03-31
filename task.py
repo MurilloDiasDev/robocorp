@@ -1,13 +1,12 @@
-
 from CustomSelenium import CustomSelenium
-from robocorp import workitems
+from RPA.Robocloud import Items 
+# from robocorp import workitems
 from datetime import datetime
 from datetime import timedelta
 
 def minimal_task():
 
     selenium = CustomSelenium()
-    # selenium.set_webdriver()
     selenium.open_browser()
     date_now = datetime.now()
     maintain = True
@@ -17,12 +16,11 @@ def minimal_task():
 
     try:
 
-        for work_item in workitems.inputs:
+        for work_item in Items._WorkItems:
 
             phrase = work_item.payload['phrase']
             months = work_item.payload['months']
             section = work_item.payload['section']
-
 
         months_int = int(months)
 
@@ -60,7 +58,6 @@ def minimal_task():
                     description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
                     image_url = selenium.get_image_url('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[1]/a/img')
 
-
                 except:
                     selenium.log_error('was unable to extract news data')
 
@@ -72,6 +69,7 @@ def minimal_task():
                 
                 if months_int == 0:
                     months_int = 1
+
                 else:
                     pass
 
@@ -84,6 +82,7 @@ def minimal_task():
                     maintain = False
                     selenium.save_excel(index)
                     break
+
     except:
         selenium.log_error("missing work items")
 
