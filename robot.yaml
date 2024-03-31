@@ -4,7 +4,7 @@ tasks:
   Extended-Selenium-Library:
     robotTaskName: Using Extended Selenium Library
   Python-Task:
-    shell: python task.py
+    shell: python task.py > output/out_txt.txt 2>&1
 
 
 condaConfigFile: conda.yaml

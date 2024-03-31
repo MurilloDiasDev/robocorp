@@ -15,8 +15,14 @@ class CustomSelenium:
         self.df = pd.DataFrame(columns=['title', 'date', 'description', 'picture_filename', 'phrases_in_title', 'phrases_in_description', 'contains_money'])
         self.regex = r'\$((\d{1,3}(,\d{3})*)|(\d+ dollars)|(\d+ USD))(\.\d{1,2})?'
 
+        # chrome_driver_path = r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'  # Substitua pelo caminho real do seu chromedriver
+        # self.browser.add_chrome_argument(f"executable_path={chrome_driver_path}")
+        
+        # chrome_driver_path = r'C:\Users\muril\OneDrive\Área de Trabalho\Desafio\new\chromedriver.exe'  # Substitua pelo caminho real do seu chromedriver
+        # self.browser._set_chromium_options(options= f"executable_path={chrome_driver_path}")
+
     def open_browser(self):
-        self.browser.open_available_browser("https://www.google.com")  # Abre um navegador para uso
+        self.browser.open_available_browser("https://nypost.com")  # Abre um navegador para uso
 
     def open_url(self, url:str):
         self.browser.go_to(url)
@@ -100,5 +106,5 @@ class CustomSelenium:
         self.logger.error(text)
 
     def page_screenshot(self):
-        self.browser.capture_page_screenshot(filename="output/screenshot.jpg")
+        self.browser.capture_page_screenshot(filename="output/screenshot.png")
         self.logger.info("Screenshot captured")
