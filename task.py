@@ -56,13 +56,9 @@ def minimal_task():
                 try:
 
                     title_text = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/h3/a')
-                    print(title_text)
                     date_str = selenium.get_date('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/span')
-                    print(date_str)
                     description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
-                    print(description)
                     image_url = selenium.get_image_url('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[1]/a/img')
-                    print(image_url)
 
 
                 except:

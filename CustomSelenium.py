@@ -16,7 +16,7 @@ class CustomSelenium:
         self.regex = r'\$((\d{1,3}(,\d{3})*)|(\d+ dollars)|(\d+ USD))(\.\d{1,2})?'
 
     def open_browser(self):
-        self.browser.open_available_browser(browser_selection="firefox")
+        self.browser.open_available_browser()
 
     def open_url(self, url:str):
         self.browser.go_to(url)
