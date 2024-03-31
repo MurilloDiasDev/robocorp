@@ -67,6 +67,7 @@ class CustomSelenium:
         return rows
 
     def outputs(self, index:str,  title_text:str, date_str:str, description:str, image_url:str, phrase:str):
+        
         number_phrases_in_title = title_text.count(phrase)
         number_phrases_in_description = description.count(phrase)
         self.logger.info("extracting data - " + str(index) + " - " + date_str + " - " + title_text)
