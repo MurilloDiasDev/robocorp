@@ -15,7 +15,7 @@ def minimal_task():
 
     try:
 
-        for work_item in workitems():
+        for work_item in workitems.inputs:
 
             phrase = work_item.payload['phrase']
             months = work_item.payload['months']
