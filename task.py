@@ -1,5 +1,5 @@
 from CustomSelenium import CustomSelenium
-from RPA.Robocloud import Items 
+from RPA.Robocorp.WorkItems import WorkItems
 # from robocorp import workitems
 from datetime import datetime
 from datetime import timedelta
@@ -16,7 +16,7 @@ def minimal_task():
 
     try:
 
-        for work_item in Items._WorkItems:
+        for work_item in WorkItems:
 
             phrase = work_item.payload['phrase']
             months = work_item.payload['months']
