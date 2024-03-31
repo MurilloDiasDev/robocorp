@@ -1,5 +1,5 @@
 
-from CustomSelenium import CustomSelenium
+from CustomSelenium_test import CustomSelenium
 from robocorp import workitems
 from datetime import datetime
 from datetime import timedelta
@@ -7,7 +7,8 @@ from datetime import timedelta
 def minimal_task():
 
     selenium = CustomSelenium()
-    selenium.set_webdriver()
+    # selenium.set_webdriver()
+    selenium.open_browser()
     date_now = datetime.now()
     maintain = True
     not_found = False
@@ -16,11 +17,16 @@ def minimal_task():
 
     try:
 
-        for work_item in workitems.inputs:
+        # for work_item in workitems.inputs:
 
-            phrase = work_item.payload['phrase']
-            months = work_item.payload['months']
-            section = work_item.payload['section']
+        #     phrase = work_item.payload['phrase']
+        #     months = work_item.payload['months']
+        #     section = work_item.payload['section']
+
+        phrase = 'dollar'
+        months = '1'
+        section = 'tech'
+
     
         months_int = int(months)
 
