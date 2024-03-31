@@ -1,5 +1,5 @@
 
-from CustomSelenium_test import CustomSelenium
+from CustomSelenium import CustomSelenium
 from robocorp import workitems
 from datetime import datetime
 from datetime import timedelta
@@ -17,17 +17,13 @@ def minimal_task():
 
     try:
 
-        # for work_item in workitems.inputs:
+        for work_item in workitems.inputs:
 
-        #     phrase = work_item.payload['phrase']
-        #     months = work_item.payload['months']
-        #     section = work_item.payload['section']
+            phrase = work_item.payload['phrase']
+            months = work_item.payload['months']
+            section = work_item.payload['section']
 
-        phrase = 'dollar'
-        months = '1'
-        section = 'tech'
 
-    
         months_int = int(months)
 
         while maintain == True:
@@ -45,6 +41,7 @@ def minimal_task():
 
                 row_str = str(row)
                 not_found = selenium.get_not_found('//*[@id="search-results"]/div/div[3]/h2')
+
                 ads_text = selenium.get_ads('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div/div/p')
 
                 if not_found == True:
@@ -59,9 +56,14 @@ def minimal_task():
                 try:
 
                     title_text = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/h3/a')
+                    print(title_text)
                     date_str = selenium.get_date('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/span')
+                    print(date_str)
                     description = selenium.get_text('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[2]/p')
+                    print(description)
                     image_url = selenium.get_image_url('//*[@id="search-results"]/div/div[3]/div[' + row_str + ']/div/div[1]/a/img')
+                    print(image_url)
+
 
                 except:
                     selenium.log_error('was unable to extract news data')
@@ -69,11 +71,13 @@ def minimal_task():
                 selenium.outputs(index, title_text, date_str, description, image_url, phrase)
 
                 index = index + 1
-                date_datetime = datetime.strptime(date_str, "%B %d, %Y ")
+                date_datetime = datetime.strptime(date_str, "%B %d, %Y")
                 delta_date = date_now - date_datetime
                 
-                if months == 0:
-                    months = 1
+                if months_int == 0:
+                    months_int = 1
+                else:
+                    pass
 
                 filter_months = months_int * 31
 
